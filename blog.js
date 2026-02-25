@@ -1,3 +1,5 @@
+console.log("Google Client ID:", process.env.CLIENT_ID);
+console.log("GitHub Client ID:", process.env.GITHUB_ID);
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose")
