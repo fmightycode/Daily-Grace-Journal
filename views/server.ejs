@@ -1,0 +1,20 @@
+<%- include("partials/header") %>
+<section class="hero text-center text-white d-flex justiy-content-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-3">Daily Journal</h1>
+      <div class="border">
+      <div class="box" id="heading">
+        <h1><%= post.postday %></h1>
+      </div>
+
+    <div class="container">
+    <h1 class="display-4 fw-bold mb-3"><%= post.postitle %></h1>
+    <p class="lead mb-4">
+     <%= post.postcontent %>
+    </p>
+    <img class="post-image" src="https://images.unsplash.com/photo-1529070538774-1843cb3265df" alt="Christ-Image">
+    </div>
+    </div> 
+  </div>
+</section>
+<%- include("partials/footer") %>

@@ -1,0 +1,20 @@
+ <%- include("partials/header") %>
+ <div class="box" id="heading">
+        <h1><%= listTitle %></h1>
+        </div>
+        <div class="box"> 
+            <% for (let i=0; i< addItem.length; i++){ %>
+                <div class="item"> 
+                <input type="checkbox">
+                 <p><%= addItem[i] %></p>
+                </div>
+            <% } %>
+             <p id="progressText" class="progress in-progress start completed">
+               Progress: 0% completed
+        </p>
+            <form action="/" method="post" class="item">
+                <input type="text" name="newItem" placeholder="New item" autocomplete="off" required>
+               <button type="submit" name="list" value="<%= listTitle %>">+</button>
+            </form>
+</div> 
+<%- include("partials/footer") %>

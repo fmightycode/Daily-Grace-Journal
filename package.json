@@ -1,0 +1,28 @@
+{
+  "name": "christian-journal",
+  "version": "1.0.0",
+  "description": "Believers lifetrack",
+  "license": "ISC",
+  "author": "Feranmi",
+  "type": "commonjs",
+  "main": "blog.js",
+  "scripts": {
+    "start": "node blog.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "lodash": "^4.17.23",
+    "mongoose": "^9.2.1",
+    "mongoose-findorcreate": "^4.0.0",
+    "nodemon": "^3.1.13",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^9.0.1"
+  }
+}

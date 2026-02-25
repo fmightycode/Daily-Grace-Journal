@@ -1,0 +1,25 @@
+<%- include("partials/header") %>
+<main class="dg-auth-page">
+  <div class="dg-auth-card">
+    <h2 class="dg-auth-title">Welcome Back</h2>
+    <p class="dg-auth-subtitle">Login to your Daily Grace Journal</p>
+    <form action="" method="post">
+      <div class="dg-form-group">
+        <label>Email</label>
+        <input type="email" name="username" placeholder="Enter your email" required />
+      </div>
+
+      <div class="dg-form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required />
+      </div>
+
+      <button type="submit" class="dg-btn-primary dg-btn-full">Login</button>
+
+      <p class="dg-auth-footer">
+        Don’t have an account? <a href="/register">Sign up</a>
+      </p>
+    </form>
+  </div>
+</main>
+<%- include("partials/footer") %>

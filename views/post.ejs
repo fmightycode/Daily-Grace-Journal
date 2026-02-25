@@ -1,0 +1,67 @@
+ <%- include("partials/header") %>
+ <section class="post-section my-2">
+  <div class="container">
+    <h2 class="mb-4 text-center">Create a New Post</h2>
+    
+    <form id="postForm" class="post-form p-4" method="post" action="/post">
+      <!--DATE-->
+      <div class="mb-3">
+        <label for="postDay" class="form-label fw-bold">Date</label>
+        <input 
+          type="text" 
+          id="postDay" 
+          name="postDay" 
+          class="form-control" 
+          placeholder="Enter today's date(e.g FEBRUARY 16,2017)" 
+          required>
+      </div>
+
+      <!--SECTION-->
+      <div class="mb-3">
+        <label for="postDay" class="form-label fw-bold">Section</label>
+        <input 
+          type="text" 
+          id="postSection" 
+          name="postSection" 
+          class="form-control" 
+          placeholder="Enter your section(e.g Home|Pray|Devotion)" 
+          required>
+      </div>
+
+
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="postTitle" class="form-label fw-bold">Title</label>
+        <input 
+          type="text" 
+          id="postTitle" 
+          name="postTitle" 
+          class="form-control" 
+          placeholder="Enter your post title" 
+          required>
+      </div>
+
+      <!-- Post Content -->
+      <div class="mb-3">
+        <label for="postContent" class="form-label fw-bold">Post</label>
+        <textarea 
+          id="postContent" 
+          name="postContent" 
+          class="form-control" 
+          rows="6" 
+          placeholder="Write your devotional or journal entry here..." 
+          required></textarea>
+      </div>
+
+      <!-- Publish Button -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg px-5">
+          Publish
+        </button>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

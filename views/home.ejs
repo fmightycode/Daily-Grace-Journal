@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+<form method="post" action="/home">
+<section class="hero text-center text-white d-flex justiy-content-center">
+  <div class="container">
+    <h6 class="display-10 fw-bold mb-3">Welcome!</h6>
+    <h1 class="display-4 fw-bold mb-3">Walking Daily in God’s Word</h1>
+    <p class="lead border   px-3 mb-4">
+     <%= homecontent %>
+    </p> 
+    <% post.forEach(function(post){ %>
+      <div class="border">
+      <div class="box" id="heading">
+        <h1><%= post.postday %></h1>
+      </div>
+
+    <div class="container">
+    <h1 class="display-4 fw-bold mb-3"><%= post.postitle %></h1>
+    <p class="lead px-3 mb-4">
+     <%= post.postcontent.substring(0, 250) + "..." %>
+     <a href="/<%= post.postitle %>">Read more</a>
+    </p>
+    </div>
+    </div>
+   <% }); %> 
+  </div>
+</section>
+</form>
+<%- include("partials/footer") %>

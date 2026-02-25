@@ -1,0 +1,43 @@
+
+<%- include("partials/header") %>
+<main class="dg-homepage">
+  <section class="dg-hero">
+    <div class="dg-hero-content">
+      <img src="/grace.png" alt="Daily Grace Journal Logo" class="dg-logo" />
+
+      <p class="dg-tagline">
+        A peaceful space to reflect, grow, and document your journey with grace.
+      </p>
+      
+    <div class="social-auth">
+      <button class="social google" onclick="location.href='/auth/google'">
+        <img src="/google.png" alt="">
+        Sign up with Google
+      </button>
+
+      <button class="social github" onclick="location.href='/auth/github'">
+        <img src="/git.png" alt="">
+        Sign up with Github
+      </button>
+    </div>
+
+    <div class="divider">OR</div>
+      <div class="dg-buttons">
+        <a href="/register" class="dg-btn-primary">Register</a>
+        <a href="/login" class="dg-btn-secondary">Login</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="dg-about">
+    <h2 class="dg-about-title">About Us</h2>
+    <p class="dg-about-text">
+      Daily Grace Journal is a digital journaling platform designed to help you
+      reflect on your thoughts, gratitude, prayers, and daily experiences.
+      We believe personal growth starts with intentional reflection.
+    </p>
+  </section>
+</main>
+
+<%- include("partials/footer") %>
+

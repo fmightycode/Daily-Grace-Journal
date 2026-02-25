@@ -1,0 +1,324 @@
+
+.post-section {
+  background-color: #f8f9fa;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.post-section h2 {
+  color: #212529;
+  font-family: 'Georgia', serif;
+}
+
+.post-form {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.post-form .form-label {
+  color: #343a40;
+}
+
+.post-form .form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.post-form button.btn-primary {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  border: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.post-form button.btn-primary:hover {
+  background: linear-gradient(135deg, #6610f2, #0d6efd);
+  transform: scale(1.05);
+}
+
+.post-image { width: 100%;
+ height: 30vh; 
+  margin-bottom: 1.25rem;
+  border-radius: 10px;
+ }
+/*SIGN UP*/
+
+/* COLORS */
+:root {
+  --dg-primary: #5a7d6c;
+  --dg-secondary: #f4f7f6;
+  --dg-dark: #2f3e3a;
+  --dg-light: #ffffff;
+}
+
+/* BUTTONS */
+.dg-btn-primary {
+  background: var(--dg-primary);
+  color: var(--dg-light);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.dg-btn-primary:hover {
+  background: #4a6b5c;
+}
+
+.dg-btn-secondary {
+  border: 2px solid var(--dg-primary);
+  color: var(--dg-primary);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.dg-btn-secondary:hover {
+  background: var(--dg-primary);
+  color: var(--dg-light);
+}
+
+.dg-btn-full {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+/* HOME PAGE */
+.dg-homepage {
+  background: var(--dg-secondary);
+}
+
+.dg-hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.dg-hero-content {
+  max-width: 600px;
+  padding: 20px;
+}
+
+.dg-logo {
+  width: 100%;
+  height: 50vh;
+  margin-top: 15px;
+}
+
+.dg-title {
+  font-size: 2.8rem;
+  color: var(--dg-dark);
+}
+
+.dg-tagline {
+  margin: 15px 0 30px;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.dg-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* ABOUT */
+.dg-about {
+  padding: 60px 20px;
+  background: var(--dg-light);
+  text-align: center;
+}
+
+.dg-about-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: var(--dg-dark);
+}
+
+.dg-about-text {
+  max-width: 700px;
+  margin: auto;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* AUTH PAGES */
+.dg-auth-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dg-secondary);
+}
+
+.dg-auth-card {
+  background: var(--dg-light);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.dg-auth-title {
+  text-align: center;
+  color: var(--dg-dark);
+}
+
+.dg-auth-subtitle {
+  text-align: center;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.dg-form-group {
+  margin-bottom: 18px;
+}
+
+.dg-form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.dg-form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.dg-form-group input:focus {
+  outline: none;
+  border-color: var(--dg-primary);
+}
+
+.dg-auth-footer {
+  text-align: center;
+  margin-top: 15px;
+  color: #555;
+}
+
+.dg-auth-footer a {
+  color: var(--dg-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Agreement line – single line, compact */
+.dg-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  margin: 0.5rem 0;   /* controls vertical spacing */
+}
+
+.dg-checkbox input {
+  margin: 0;
+}
+
+.dg-checkbox label {
+  margin: 0;
+  white-space: nowrap; /* forces single line */
+}
+
+.dg-checkbox a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.dg-checkbox a:hover {
+  text-decoration: underline;
+}
+.policy-page{ 
+  margin: 0.8rem;
+}
+
+/* SOCIAL BUTTONS — SAME SIZE AS PRIMARY */
+.social-auth .social,
+.primary {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* Google */
+.social.google {
+  background: white;
+  border: 1px solid #ddd;
+  color: #111;
+}
+
+.social.google:hover {
+  background: #f3f4f6;
+}
+
+/* Facebook */
+.social.github {
+  background: black;
+  border: none;
+  color: white;
+}
+
+.social.github:hover {
+  background: black;
+}
+
+/* Logos */
+.social img {
+  width: 35px;
+  height:5vh
+}
+
+/* Spacing */
+.social-auth {
+  margin-bottom: 20px;
+}
+
+.social-auth button {
+  margin-bottom: 12px;
+}
+.divider { 
+  margin-bottom: 0.6rem;
+}
+/*FEEDBACK*/
+.feedback{ 
+   background: green;
+   margin-top: 1rem;
+   position: relative;
+   border-radius: 10px;
+}
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .post-form {
+    padding: 2rem 1rem;
+  }
+
+  .post-form button.btn-primary {
+    width: 100%;
+  }
+}

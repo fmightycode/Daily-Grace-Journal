@@ -1,0 +1,39 @@
+<%- include("partials/header") %>
+  <main class="dg-auth-page">
+  <div class="dg-auth-card">
+    <h2 class="dg-auth-title">Create Account</h2>
+    <p class="dg-auth-subtitle">Start journaling with grace</p>
+    <form action="/register" method="post">
+      <div class="dg-form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your full name" name="fullname" required />
+      </div>
+
+      <div class="dg-form-group">
+        <label>Email</label>
+        <input type="email" placeholder="Your email address" name="username" required />
+      </div>
+
+      <div class="dg-form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Create a password" name="password" required />
+      </div>
+      <div class="dg-form-group dg-checkbox">
+  <input type="checkbox" id="agree" name="agree" required />
+  <label for="agree">
+    I agree to the
+    <a href="/terms" target="_blank">Terms of Service</a>
+    and
+    <a href="/privacy" target="_blank">Privacy Policy</a>
+  </label>
+</div>
+
+      <button type="submit" class="dg-btn-primary dg-btn-full">Create Account</button>
+
+      <p class="dg-auth-footer">
+        Already have an account? <a href="/login">Login</a>
+      </p>
+    </form>
+  </div>
+</main>
+<%- include("partials/footer") %>

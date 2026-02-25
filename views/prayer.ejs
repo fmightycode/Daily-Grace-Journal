@@ -1,0 +1,27 @@
+<%- include("partials/header") %>
+<form method="post" action="/prayer">
+<section class="hero text-center text-white d-flex justiy-content-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-3">Daily Prayer</h1>
+    <p class="lead mb-4 px-3 border">
+     <%= prayerContent %>
+    </p>
+
+    <% post.forEach(function(post){ %>
+      <div class="border">
+      <div class="box" id="heading">
+        <h1><%= post.postday %></h1>
+      </div>
+
+    <div class="container">
+    <h1 class="display-4 fw-bold mb-3"><%= post.postitle %></h1>
+    <p class="lead px-3 mb-4">
+     <%= post.postcontent %>
+    </p>
+    </div>
+    </div>
+   <% }); %> 
+  </div>
+</section>
+</form>
+<%- include("partials/footer") %>
