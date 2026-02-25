@@ -69,7 +69,7 @@ app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"));
 
 app.use(session({ 
-    secret: "This is my secret",
+    secret: process.env.SECRET_SESSION,
     resave: false,
     saveUninitialized: false
 }));
