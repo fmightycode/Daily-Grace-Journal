@@ -1,5 +1,4 @@
-console.log("Google Client ID:", process.env.CLIENT_ID);
-console.log("GitHub Client ID:", process.env.GITHUB_ID);
+
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose")
@@ -154,76 +153,66 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
-passport.use(
-  new GoogleStrategy(
-    {
+if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
+  const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+  passport.use(new GoogleStrategy({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: "/auth/google/home",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
     },
-    function (accessToken, refreshToken, profile, cb) {
+    function(accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
         { googleId: profile.id },
         {
           username: profile.emails?.[0]?.value,
           fullname: profile.displayName
         },
-        function (err, user) {
-          return cb(err, user);
-        }
+        cb
       );
     }
-  )
-);
+  ));
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["openid", "profile", "email"]
-  })
-);
+  app.get("/auth/google", passport.authenticate("google", { scope: ["openid", "profile", "email"] }));
 
-app.get(
-  "/auth/google/home",
-  passport.authenticate("google", {
-    failureRedirect: "/login"
-  }),
-  function (req, res) {
-    res.redirect("/signup");
-  }
-);
+  app.get("/auth/google/home", 
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    function(req, res) { 
+      res.redirect("/signup"); 
+    }
+  );
+}
 
-passport.use(
-  new GitHubStrategy(
-    {
+if (process.env.GITHUB_ID && process.env.GITHUB_SECRET && process.env.GIT_URL) {
+  const GitHubStrategy = require("passport-github2").Strategy;
+
+  passport.use(new GitHubStrategy({
       clientID: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
       callbackURL: process.env.GIT_URL
     },
-    function (accessToken, refreshToken, profile, cb) {
+    function(accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
         { githubId: profile.id },
         {
           username: profile.emails?.[0]?.value,
           fullname: profile.displayName || profile.username
         },
-        function (err, user) {
-          return cb(err, user);
-        }
+        cb
       );
     }
-  )
-);
+  ));
 
-app.get("/auth/github",
-  passport.authenticate("github", { scope: [ "user:email" ] }));
+  app.get("/auth/github", passport.authenticate("github", { scope: ["user:email"] }));
 
-app.get("/auth/github/home",
-  passport.authenticate('github', { failureRedirect: "/login" }),
-  function(req, res) {
-    res.redirect("/signup");
-  });
+  app.get("/auth/github/home", 
+    passport.authenticate("github", { failureRedirect: "/login" }),
+    function(req, res) { 
+      res.redirect("/signup"); 
+    }
+  );
+}
 
 app.get("/", function(req, res){   
     res.render("signup")
