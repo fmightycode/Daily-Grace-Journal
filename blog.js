@@ -159,7 +159,7 @@ if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
   passport.use(new GoogleStrategy({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "/auth/google/home",
+      callbackURL: "https://daily-grace-journal.onrender.com/auth/google/home",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
     },
     function(accessToken, refreshToken, profile, cb) {
