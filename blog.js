@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 const path = require("path");
 const app = express();
 const _ = require("lodash");
+const MongoStore = require("connect-mongo");
 const session = require("express-session");
 const passport = require("passport");
 const { MissingUsernameError } = require("passport-local-mongoose/dist/lib/errors");
@@ -72,7 +73,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(session({ 
     secret: process.env.SECRET_SESSION,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }),
 }));
 
 app.use(passport.initialize());
