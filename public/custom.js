@@ -1,5 +1,7 @@
 
-  const toggleBtn = document.getElementById("themeToggle");
+  const toggleBtn = document.getElementById("themeToggle");  
+  toggleBtn.textContent = "🌙";              
+  toggleBtn.style.backgroundColor = "green";
 
   toggleBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
