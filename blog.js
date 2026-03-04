@@ -380,22 +380,22 @@ app.post("/login", async(req, res) =>{
 });
 
 app.post("/post", async(req, res) =>{ 
-    const postSection = _.capitalize(req.body.postSection);
+    const postSection = (req.body.postSection);
     const home = new Home ({
         postday: _.toUpper(req.body.postDay),
-        postitle: _.capitalize(req.body.postTitle),
+        postitle: (req.body.postTitle),
         postcontent: req.body.postContent
     });
     
     const pray = new Pray ({
         postday: _.toUpper(req.body.postDay),
-        postitle: _.capitalize(req.body.postTitle),
+        postitle: (req.body.postTitle),
         postcontent: req.body.postContent
     });
 
     const devotion = new Devotion ({
         postday: _.toUpper(req.body.postDay),
-        postitle: _.capitalize(req.body.postTitle),
+        postitle: (req.body.postTitle),
         postcontent: req.body.postContent
     });
     try {
@@ -431,7 +431,7 @@ app.post("/post", async(req, res) =>{
 });
 
 app.get("/:postName", isLoggedIn, async(req, res) =>{ 
-    const requestTitle = _.capitalize(req.params.postName);
+    const requestTitle = (req.params.postName);
     const foundList = await Home.find();
     let postSend = null;
     try {

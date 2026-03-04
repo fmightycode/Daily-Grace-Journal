@@ -1,22 +1,37 @@
 
-  const toggleBtn = document.getElementById("themeToggle");  
-  toggleBtn.textContent = "🌙";              
-  toggleBtn.style.backgroundColor = "green";
+const toggleBtn = document.getElementById("themeToggle");  
+const section = document.querySelector("section");
 
-  toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
+// default UI (light)
+toggleBtn.textContent = "🌙";              
+toggleBtn.style.backgroundColor = "green";
 
-    // Change icon
-    if (document.body.classList.contains("dark-mode")) {
-      toggleBtn.textContent = "☀️";
-      toggleBtn.style.backgroundColor="#212529";
-      section.classList.add("dark")
-    } else {
-      toggleBtn.textContent = "🌙";
-       toggleBtn.style.backgroundColor="green";
-       section.classList.remove("dark")
-    }
-  });
+// restore theme ONLY if user explicitly chose dark before
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark-mode");
+  toggleBtn.textContent = "☀️";
+  toggleBtn.style.backgroundColor = "#212529";
+  if (section) section.classList.add("dark");
+}
+
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+
+  const isDark = document.body.classList.contains("dark-mode");
+
+  // save user choice
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+
+  if (isDark) {
+    toggleBtn.textContent = "☀️";
+    toggleBtn.style.backgroundColor = "#212529";
+    if (section) section.classList.add("dark");
+  } else {
+    toggleBtn.textContent = "🌙";
+    toggleBtn.style.backgroundColor = "green";
+    if (section) section.classList.remove("dark");
+  }
+});
 
   let lastScrollTop = 0;
   const navbar = document.getElementById("mainNavbar");
