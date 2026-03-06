@@ -15,10 +15,7 @@
 
     <div class="container">
     <h1 class="display-4 fw-bold mb-3"><%= post.postitle %></h1>
-    <p class="lead px-0.2 mb-4">
-     <%= post.postcontent.substring(0, 250) + "..." %>
-     <a href="/<%= post.postitle %>">Read more</a>
-    </p>
+    <p class="lead px-0.2 mb-4 preserve-text"><%= post.postcontent.trimStart().substring(0, 470) + "..." %><a href="/<%= post.postitle %>">Read more</a></p>
     </div>
     </div>
    <% }); %> 
