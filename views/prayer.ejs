@@ -1,25 +1,41 @@
 <%- include("partials/header") %>
+
 <form method="post" action="/prayer">
-<section class="hero text-center text-white d-flex justiy-content-center">
+<section class="hero text-center text-white d-flex justify-content-center">
   <div class="container">
     <h1 class="display-4 fw-bold mb-3">Daily Prayer</h1>
     <p class="lead mb-4 px-3 border">
-     <%= prayerContent %>
+      <%= prayerContent %>
     </p>
 
-    <% post.forEach(function(post){ %>
-      <div class="border">
-      <div class="box" id="heading">
-        <h1><%= post.postday %></h1>
-      </div>
+    <% post.forEach(function(post, index){ %>
+      <div class="border mb-3">
+        <div class="box" id="heading">
+          <h2><%= post.postday %></h2>
+        </div>
 
-    <div class="container">
-    <h1 class="display-4 fw-bold mb-3 preserve-text"><%= post.postitle %></h1>
-    <p class="lead px-0.2 mb-4"><%= post.postcontent %></p>
-    </div>
-    </div>
-   <% }); %> 
+        <div class="container">
+          <h3 class="fw-bold mb-2"><%= post.postitle %></h3>
+          <p class="mb-2"><%= post.postcontent %></p>
+
+          <!-- Amen span with green border -->
+          <span class="amen-btn" data-post="<%= index %>" data-title="<%= post.postitle %>">
+            🙏 Amen
+          </span>
+        </div>
+      </div>
+    <% }); %>
   </div>
 </section>
 </form>
+
+<!-- Dynamic Popup -->
+<div id="amen-popup" class="popup-overlay">
+  <div class="popup-content">
+    <h3 id="popup-title">Amen!</h3>
+    <p id="popup-msg">You said Amen 🙏</p>
+    <span id="close-popup">&times;</span>
+  </div>
+</div>
+
 <%- include("partials/footer") %>

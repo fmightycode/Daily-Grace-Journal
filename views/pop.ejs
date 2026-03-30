@@ -1,0 +1,26 @@
+ <%- include("partials/header") %>
+<!-- Popup -->
+<div id="amen-popup" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.4);
+  justify-content:center;
+  align-items:center;
+">
+
+  <div style="
+    background:#e6f9e6;
+    border:2px solid green;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+  ">
+    <h3 style="color:green;">Amen 🙏</h3>
+    <p id="popup-msg"></p>
+    <span id="close-popup" style="cursor:pointer;">Close</span>
+  </div>
+
+</div>
+<%- include("partials/footer") %>

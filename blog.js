@@ -1,17 +1,42 @@
-
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 const _ = require("lodash");
 const session = require("express-session");
 const passport = require("passport");
-const { MissingUsernameError } = require("passport-local-mongoose/dist/lib/errors");
 const passportLocalMongoose = require("passport-local-mongoose").default;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
+const axios = require("axios"); // ✅ NEW
+
+// 🔔 NOTIFICATION FUNCTION
+async function sendNotification(title, message) {
+  try {
+    await axios.post(
+      "https://onesignal.com/api/v1/notifications",
+      {
+        app_id: process.env.ONESIGNAL_APP_ID,
+        included_segments: ["All"],
+        headings: { en: title },
+        contents: { en: message }
+      },
+      {
+        headers: {
+          Authorization: `Basic ${process.env.ONESIGNAL_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("✅ Notification sent");
+
+  } catch (err) {
+    console.error("❌ Notification error:", err.response?.data || err.message);
+  }
+}
 const homeContent = `Daily Grace Journal is a quiet space created for believers who desire to walk closely with God in their everyday lives. In a world filled with noise and distractions, this journal exists to help you pause, reflect, and reconnect with God’s Word in a meaningful way.
 Our heart is to encourage a daily rhythm of devotion—one that is honest, reflective, and deeply rooted in Scripture. Whether you are beginning your faith journey or have walked with Christ for many years, you will find words here that speak gently to your spirit and strengthen your walk.
 Each devotional is written to guide you into moments of stillness, helping you meditate on God’s truth and apply it practically to your life. These reflections are not meant to rush you, but to invite you into a slower, deeper encounter with God’s presence.
@@ -117,6 +142,7 @@ const homeSchema = new mongoose.Schema({
     postday: String,
     postitle: String,
     postcontent: String
+    
 });
 
 const Home = mongoose.model("Home", homeSchema);
@@ -381,55 +407,83 @@ app.post("/login", async(req, res) =>{
 
 app.post("/post", async(req, res) =>{ 
     const postSection = (req.body.postSection);
+
     const home = new Home ({
         postday: _.toUpper(req.body.postDay),
-        postitle: (req.body.postTitle),
+        postitle: req.body.postTitle,
         postcontent: req.body.postContent
     });
     
     const pray = new Pray ({
         postday: _.toUpper(req.body.postDay),
-        postitle: (req.body.postTitle),
+        postitle: req.body.postTitle,
         postcontent: req.body.postContent
     });
 
     const devotion = new Devotion ({
         postday: _.toUpper(req.body.postDay),
-        postitle: (req.body.postTitle),
+        postitle: req.body.postTitle,
         postcontent: req.body.postContent
     });
+
     try {
-         if (postSection === "Home"){ 
+
+        // ✅ HOME POST
+        if (postSection === "Home"){ 
             const post = await Home.findOne({postitle: home.postitle});
+
             if (!post){ 
-                home.save()
-                res.redirect("/home")
+                await home.save();
+
+                await sendNotification(
+                    "📖 New Devotional Available",
+                    home.postitle + " - Tap to read"
+                );
+
+                res.redirect("/home");
             } else{
-            res.redirect("/home");
+                res.redirect("/home");
             }
+
+        // ✅ DEVOTION
         } else if(postSection === "Devotion"){ 
             const post = await Devotion.findOne({postitle: devotion.postitle});
-        if (!post){ 
-            devotion.save()
-            res.redirect("/devotional")
-        } else {
-        res.redirect("/devotional");
-       }   
-        }else if(postSection === "Pray"){ 
-            const post = await Pray.findOne({postitle: pray.postitle});
+
             if (!post){ 
-                pray.save()
+                await devotion.save();
+
+                await sendNotification(
+                    "✨ New Devotional",
+                    devotion.postitle
+                );
+
+                res.redirect("/devotional");
+            } else {
+                res.redirect("/devotional");
+            }
+
+        // ✅ PRAYER
+        } else if(postSection === "Pray"){ 
+            const post = await Pray.findOne({postitle: pray.postitle});
+
+            if (!post){ 
+                await pray.save();
+
+                await sendNotification(
+                    "🙏 New Prayer Posted",
+                    pray.postitle
+                );
+
                 res.redirect("/prayer");
             } else { 
-            res.redirect("/prayer");
+                res.redirect("/prayer");
             }
         }
-    }
-    catch (error) {
-        console.error(error)
+
+    } catch (error) {
+        console.error(error);
     }
 });
-
 app.get("/:postName", isLoggedIn, async(req, res) =>{ 
     const requestTitle = (req.params.postName);
     const foundList = await Home.find();

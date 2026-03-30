@@ -414,7 +414,75 @@ h1{
 }
 
 /*LOG OUT */
+/* Amen span style */
+.amen-btn {
+  display: inline-block;
+  border: 2px solid green;
+  padding: 5px 12px;
+  border-radius: 8px;
+  color: green;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 5px;
+}
+.amen-btn:hover {
+  background-color: green;
+  color: white;
+}
 
+/* Popup overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup content */
+.popup-content {
+  background-color: #e6f9e6; /* light green */
+  border: 2px solid green;
+  padding: 25px 35px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  min-width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Close button */
+#close-popup {
+  position: absolute;
+  top: 8px; right: 12px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: green;
+}
+#close-popup:hover {
+  color: darkgreen;
+}
+
+/* Popup text styles */
+#popup-title {
+  color: green;
+  margin-bottom: 8px;
+}
+#popup-msg {
+  font-size: 1rem;
+}
 
 /* RESPONSIVE TEXT */
 @media (max-width: 768px) {

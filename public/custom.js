@@ -33,6 +33,36 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById("amen-popup");
+  const popupTitle = document.getElementById("popup-title");
+  const popupMsg = document.getElementById("popup-msg");
+  const closeBtn = document.getElementById("close-popup");
+  const amenButtons = document.querySelectorAll(".amen-btn");
+
+  amenButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const postTitle = btn.dataset.title;
+      popupTitle.textContent = "Amen 🙏";
+      popupMsg.textContent = `You are blessed in Jesus Name (Amen)`;
+      popup.style.display = "flex";
+    });
+  });
+
+  // Close popup
+  closeBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+  });
+
+  // Click outside popup closes it
+  popup.addEventListener("click", (e) => {
+    if (e.target === popup) {
+      popup.style.display = "none";
+    }
+  });
+});
+
+
   let lastScrollTop = 0;
   const navbar = document.getElementById("mainNavbar");
 
