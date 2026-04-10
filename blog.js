@@ -408,7 +408,7 @@ app.post("/post", async(req, res) =>{
             if (!post){ 
                 await home.save();
 
-                await sendNotification(
+                 sendNotification(
                     "📖 New Devotional Available",
                     home.postitle + " - Tap to read"
                 );
@@ -425,7 +425,7 @@ app.post("/post", async(req, res) =>{
             if (!post){ 
                 await devotion.save();
 
-                await sendNotification(
+                sendNotification(
                     "✨ New Devotional",
                     devotion.postitle
                 );
@@ -442,7 +442,7 @@ app.post("/post", async(req, res) =>{
             if (!post){ 
                 await pray.save();
 
-                await sendNotification(
+                sendNotification(
                     "🙏 New Prayer Posted",
                     pray.postitle
                 );
