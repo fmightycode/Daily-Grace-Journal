@@ -105,11 +105,11 @@ app.use(passport.session());
 
 mongoose.set("bufferCommands", false);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 mongoose
   .connect(process.env.MONGO_URL, {
-    serverSelectionTimeoutMS: 5000,
+    serverSelectionTimeoutMS: 120000,
   })
   .then(() => {
     console.log("✅ Connected to MongoDB Atlas");
