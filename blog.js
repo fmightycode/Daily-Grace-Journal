@@ -10,9 +10,7 @@ const passportLocalMongoose = require("passport-local-mongoose").default;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
-const axios = require("axios"); // ✅ NEW
-
-// 🔔 NOTIFICATION FUNCTION
+const axios = require("axios");
 async function sendNotification(title, message) {
   try {
     await axios.post(
@@ -30,9 +28,7 @@ async function sendNotification(title, message) {
         }
       }
     );
-
     console.log("✅ Notification sent");
-
   } catch (err) {
     console.error("❌ Notification error:", err.response?.data || err.message);
   }
@@ -87,17 +83,18 @@ Faith grows when believers support one another. Reaching out is an act of courag
 We believe God works through community. Conversations can bring healing and hope.
 Thank you for being part of this journey. Your presence enriches this space. Whatsapp contact: 08164355099 or Click any of the social handles on the footer`
 
-app.use(express.urlencoded({extended: true}));
+// MIDDLEWARE
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join("public")));
 app.use(express.json());
 
-app.set("view engine", "ejs")
+app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use(session({ 
-    secret: process.env.SECRET_SESSION,
-    resave: false,
-    saveUninitialized: false
+app.use(session({
+  secret: process.env.SECRET_SESSION,
+  resave: false,
+  saveUninitialized: false
 }));
 
 app.use(passport.initialize());
@@ -107,30 +104,28 @@ mongoose.set("bufferCommands", false);
 
 const PORT = process.env.PORT || 10000;
 
-mongoose
-  .connect(process.env.MONGO_URL, {
-    serverSelectionTimeoutMS: 120000,
-  })
-  .then(() => {
-    console.log("✅ Connected to MongoDB Atlas");
-
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err);
+// DATABASE
+mongoose.connect(process.env.MONGO_URL, {
+  serverSelectionTimeoutMS: 120000,
+})
+.then(() => {
+  console.log("✅ Connected to MongoDB Atlas");
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
   });
-const userSchema = new mongoose.Schema({ 
-    fullname: String,
-    username: String,
-    googleId: String,
-    githubId: String,
-    feedback: String,
-    isAdmin: { 
-        type: Boolean,
-        default: false
-    },
+})
+.catch((err) => {
+  console.error("❌ MongoDB connection failed:", err);
+});
+
+// SCHEMAS
+const userSchema = new mongoose.Schema({
+  fullname: String,
+  username: String,
+  googleId: String,
+  githubId: String,
+  feedback: String,
+  isAdmin: { type: Boolean, default: false }
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -138,368 +133,173 @@ userSchema.plugin(findOrCreate);
 
 const User = mongoose.model("Users", userSchema);
 
-const homeSchema = new mongoose.Schema({ 
-    postday: String,
-    postitle: String,
-    postcontent: String
-    
-});
+const Home = mongoose.model("Home", new mongoose.Schema({
+  postday: String,
+  postitle: String,
+  postcontent: String
+}));
 
-const Home = mongoose.model("Home", homeSchema);
+const Pray = mongoose.model("Pray", new mongoose.Schema({
+  postday: String,
+  postitle: String,
+  postcontent: String
+}));
 
-const praySchema = new mongoose.Schema({ 
-    postday: String,
-    postitle: String,
-    postcontent: String
-});
+const Devotion = mongoose.model("Devotion", new mongoose.Schema({
+  postday: String,
+  postitle: String,
+  postcontent: String
+}));
 
-const Pray = mongoose.model("Pray", praySchema);
-
-const devotionSchema = new mongoose.Schema({ 
-    postday: String,
-    postitle: String,
-    postcontent: String
-});
-
-const Devotion = mongoose.model("Devotion", devotionSchema);
-
+// PASSPORT
 passport.use(User.createStrategy());
 
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => done(null, user)).catch(err => done(err));
 });
 
-passport.deserializeUser(function (id, done) {
-  User.findById(id)
-    .then(user => {
-      done(null, user);
-    })
-    .catch(err => {
-      done(err, null);
+// AUTH MIDDLEWARE
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/login");
+}
+
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.isAdmin) return next();
+  res.status(403).send("Access Denied");
+}
+
+// ROUTES
+app.get("/", (req, res) => res.render("signup"));
+app.get("/register", (req, res) => res.render("register"));
+app.get("/login", (req, res) => res.render("login"));
+app.get("/privacy", (req, res) => res.render("privacy"));
+app.get("/terms", (req, res) => res.render("terms"));
+app.get("/feedback", (req, res) => res.render("feedback"));
+
+app.get("/home", isLoggedIn, async (req, res) => {
+  try {
+    const foundList = await Home.find();
+    return res.render("home", { homecontent: "content", post: foundList });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Error loading home");
+  }
+});
+
+app.get("/devotional", isLoggedIn, async (req, res) => {
+  try {
+    const foundList = await Devotion.find();
+    return res.render("devotional", { devocontent: "content", post: foundList });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Error loading devotional");
+  }
+});
+
+app.get("/prayer", isLoggedIn, async (req, res) => {
+  try {
+    const foundList = await Pray.find();
+    return res.render("prayer", { prayerContent: "content", post: foundList });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Error loading prayer");
+  }
+});
+
+app.get("/about", async (req, res) => {
+  try {
+    const foundUser = await User.find({ feedback: { $ne: null } });
+    return res.render("about", { aboutcontent: "content", userFeedback: foundUser });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Error loading about");
+  }
+});
+
+// FIXED DYNAMIC ROUTE
+app.get("/post/:postName", isLoggedIn, async (req, res) => {
+  try {
+    const foundList = await Home.find();
+    const postSend = foundList.find(p => p.postitle === req.params.postName);
+
+    if (!postSend) return res.redirect("/home");
+
+    return res.render("server", { post: postSend });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Error loading post");
+  }
+});
+
+// POST ROUTES
+app.post("/feedback", isAdmin, async (req, res) => {
+  try {
+    const submitFeedback = req.body.message;
+    const user = await User.findById(req.user.id);
+    user.feedback = submitFeedback;
+    await user.save();
+    res.redirect("/about");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error saving feedback");
+  }
+});
+
+app.post("/post", async (req, res) => {
+  try {
+    const home = new Home({
+      postday: _.toUpper(req.body.postDay),
+      postitle: req.body.postTitle,
+      postcontent: req.body.postContent
     });
+
+    await home.save();
+
+    // FIXED: no await
+    sendNotification("📖 New Post", home.postitle);
+
+    res.redirect("/home");
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error posting");
+  }
 });
 
-if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
-  const GoogleStrategy = require("passport-google-oauth20").Strategy;
+// LOGIN
+app.post("/login", (req, res) => {
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password
+  });
 
-  passport.use(new GoogleStrategy({
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "https://daily-grace-journal.onrender.com/auth/google/home",
-      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-    },
-    function(accessToken, refreshToken, profile, cb) {
-      User.findOrCreate(
-        { googleId: profile.id },
-        {
-          username: profile.emails?.[0]?.value,
-          fullname: profile.displayName
-        },
-        cb
-      );
-    }
-  ));
-
-  app.get("/auth/google", passport.authenticate("google", { scope: ["openid", "profile", "email"] }));
-
-  app.get("/auth/google/home", 
-    passport.authenticate("google", { failureRedirect: "/login" }),
-    function(req, res) { 
-      res.redirect("/signup"); 
-    }
-  );
-}
-
-if (process.env.GITHUB_ID && process.env.GITHUB_SECRET && process.env.GIT_URL) {
-  const GitHubStrategy = require("passport-github2").Strategy;
-
-  passport.use(new GitHubStrategy({
-      clientID: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      callbackURL: process.env.GIT_URL
-    },
-    function(accessToken, refreshToken, profile, cb) {
-      User.findOrCreate(
-        { githubId: profile.id },
-        {
-          username: profile.emails?.[0]?.value,
-          fullname: profile.displayName || profile.username
-        },
-        cb
-      );
-    }
-  ));
-
-  app.get("/auth/github", passport.authenticate("github", { scope: ["user:email"] }));
-
-  app.get("/auth/github/home", 
-    passport.authenticate("github", { failureRedirect: "/login" }),
-    function(req, res) { 
-      res.redirect("/signup"); 
-    }
-  );
-}
-
-app.get("/", function(req, res){   
-    res.render("signup")
-})
-app.get("/register", function(req, res){ 
-    res.render("register")
-})
-app.get("/login", function(req, res){ 
-    res.render("login")
-})
-
-app.get("/contact", isLoggedIn, (req, res) =>{ 
-    res.render("contact", {contactcontent: contact})
-});
-
-app.get("/about", async(req, res) =>{ 
-    try {
-        const foundUser = await User.find({"feedback": {$ne: null}});
-        if (!foundUser){ 
-            console.log("User not found")
-        } 
-        res.render("about", {aboutcontent: about, userFeedback: foundUser});
-    } catch (error) {
-       console.error(error);
-    }
-});
-
-app.get("/post", isAdmin, (req, res) =>{ 
-    res.render("post");
-});
-
-app.get("/logout", function(req, res){ 
-    req.logout(function(err) {
-    if (err) { return next(err); }
-    res.redirect("/login");
+  req.login(user, err => {
+    if (err) return res.redirect("/login");
+    passport.authenticate("local")(req, res, () => res.redirect("/home"));
   });
 });
 
-app.get("/privacy", function(req, res){
-  res.render("privacy");
-});
-
-app.get("/terms", function(req, res){
-  res.render("terms");
-});
-
-app.get("/feedback", (req, res) => {
-  res.render("feedback");
-});
-
-
-app.post("/feedback", isAdmin, async(req, res) => {
-        submitFeedback = req.body.message;
-        console.log(req.user)
-    try {
-        const foundUser = await User.findById(req.user.id);
-        if (!foundUser){ 
-            console.log("User doesn't exist")
-        }
-        foundUser.feedback = submitFeedback;
-        await foundUser.save();
-        res.redirect("/about")
-
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-app.get("/home", isLoggedIn, async(req, res) =>{ 
-     try {
-        const foundList = await Home.find();
-        if (foundList.length === 0){ 
-           res.render("home", {homecontent: homeContent, post: foundList})
-        }
-        else{ 
-           res.render("home", {homecontent: homeContent, post: foundList})
-        }
-    } catch (err) {
-        console.error(err)
-    }
-});
-
-app.get("/devotional", isLoggedIn, async(req, res) =>{ 
-     try {
-        const foundList = await Devotion.find();
-        if (foundList.length === 0){ 
-           res.render("devotional", {devocontent: devotional, post: foundList})
-        }
-        else{ 
-           res.render("devotional", {devocontent: devotional, post: foundList})
-        }
-    } catch (err) {
-        console.error(err)
-    }
-});
-
-app.get("/prayer", isLoggedIn, async(req, res) =>{ 
-     try {
-        const foundList = await Pray.find();
-        if (foundList.length === 0){ 
-           res.render("prayer", {prayerContent: prayer, post: foundList})
-        }
-        else{ 
-           res.render("prayer", {prayerContent: prayer, post: foundList})
-        }
-    } catch (err) {
-        console.error(err)
-    }
-});
-
-function isLoggedIn(req, res, next){ 
-    if (req.isAuthenticated()){ 
-        return next();
-    }
-    res.redirect("/login")
-}
-
-function isAdmin(req, res, next){
-    if (req.isAuthenticated() && req.user.isAdmin){ 
-        return next()
-    }
-    else {
-        res.status(403).send("Access Denied")
-}
-}
-
-app.post("/register", async(req, res) => {
-    try {
-         if (!req.body.agree) {
-      return res.redirect("/register");
-    }
-        const user = new User ({ 
-            username: req.body.username,
-            fullname: req.body.fullname
-        });
-        await User.register(user, req.body.password);
-        passport.authenticate("local")(req, res, function(){ 
-            res.redirect("/home")
-        });
-        
-    } catch (error) {
-        console.error(error);
-        res.redirect("/register");
-    }
-});
-
-app.post("/login", async(req, res) =>{ 
-    try {
-        const user = new User({ 
-            username: req.body.username,
-            password: req.body.password
-        });   
-        req.login(user, function(err){ 
-            if (!err){
-                passport.authenticate("local")(req, res, function(){ 
-                res.redirect("/home");
-            });
-            } else{ 
-                res.redirect("/login");
-            }
-        });
-    } catch (error) {
-        console.error(error, "Sign up first");
-    }
-});
-
-app.post("/post", async(req, res) =>{ 
-    const postSection = (req.body.postSection);
-
-    const home = new Home ({
-        postday: _.toUpper(req.body.postDay),
-        postitle: req.body.postTitle,
-        postcontent: req.body.postContent
-    });
-    
-    const pray = new Pray ({
-        postday: _.toUpper(req.body.postDay),
-        postitle: req.body.postTitle,
-        postcontent: req.body.postContent
+// REGISTER
+app.post("/register", async (req, res) => {
+  try {
+    const user = new User({
+      username: req.body.username,
+      fullname: req.body.fullname
     });
 
-    const devotion = new Devotion ({
-        postday: _.toUpper(req.body.postDay),
-        postitle: req.body.postTitle,
-        postcontent: req.body.postContent
-    });
+    await User.register(user, req.body.password);
+    passport.authenticate("local")(req, res, () => res.redirect("/home"));
 
-    try {
-
-        // ✅ HOME POST
-        if (postSection === "Home"){ 
-            const post = await Home.findOne({postitle: home.postitle});
-
-            if (!post){ 
-                await home.save();
-
-                await sendNotification(
-                    "📖 New Devotional Available",
-                    home.postitle + " - Tap to read"
-                );
-
-                res.redirect("/home");
-            } else{
-                res.redirect("/home");
-            }
-
-        // ✅ DEVOTION
-        } else if(postSection === "Devotion"){ 
-            const post = await Devotion.findOne({postitle: devotion.postitle});
-
-            if (!post){ 
-                await devotion.save();
-
-                await sendNotification(
-                    "✨ New Devotional",
-                    devotion.postitle
-                );
-
-                res.redirect("/devotional");
-            } else {
-                res.redirect("/devotional");
-            }
-
-        // ✅ PRAYER
-        } else if(postSection === "Pray"){ 
-            const post = await Pray.findOne({postitle: pray.postitle});
-
-            if (!post){ 
-                await pray.save();
-
-                await sendNotification(
-                    "🙏 New Prayer Posted",
-                    pray.postitle
-                );
-
-                res.redirect("/prayer");
-            } else { 
-                res.redirect("/prayer");
-            }
-        }
-
-    } catch (error) {
-        console.error(error);
-    }
+  } catch (err) {
+    console.error(err);
+    res.redirect("/register");
+  }
 });
-app.get("/:postName", isLoggedIn, async(req, res) =>{ 
-    const requestTitle = (req.params.postName);
-    const foundList = await Home.find();
-    let postSend = null;
-    try {
-      for (let i = 0; i < foundList.length;i++){
-        if (foundList[i].postitle === requestTitle){ 
-            postSend = foundList[i];
-            break
-        } 
-      }
-      if (!postSend){ 
-        return res.redirect("/home")
-      }
-      res.render("server", {post: postSend});
-    } catch (error) {
-        console.log(error);
-    }
+
+// 404 HANDLER
+app.use((req, res) => {
+  res.status(404).send("Page not found");
 });
